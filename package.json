@@ -26,6 +26,7 @@
   "dependencies": {
     "ac-koa": "^0.2.6",
     "ac-koa-hipchat": "^0.2.14",
+    "ac-node": "^0.2.3",
     "lodash": "^3.7.0"
   }
 }
