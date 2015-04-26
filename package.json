@@ -1,0 +1,31 @@
+{
+  "name": "patenpartner",
+  "displayName": "Patenpartner",
+  "description": "Designates two people as patenpartners",
+  "version": "0.1.0",
+  "author": {
+    "name": "Christian Lobach",
+    "url": "http://christian-lobach.de"
+  },
+  "license": "Apache 2.0",
+  "engines": {
+    "node": "~0.11.13"
+  },
+  "scripts": {
+    "web": "node --harmony web.js",
+    "web-dev": "nodemon --harmony -e js,css,hbs,html web.js",
+    "tunnel": "ngrok 3000"
+  },
+  "development": {
+    "localBaseUrl": "https://1f6c5e34.ngrok.com",
+    "port": 3000
+  },
+  "production": {
+    "port": "$PORT"
+  },
+  "dependencies": {
+    "ac-koa": "^0.2.6",
+    "ac-koa-hipchat": "^0.2.14",
+    "lodash": "^3.7.0"
+  }
+}
