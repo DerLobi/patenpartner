@@ -31,6 +31,14 @@ addon.webhook('room_message', /^\/patenpartner set (\w+) (\w+)$/i, function *() 
 	yield this.roomClient.sendNotification('Partners are: ' + person1 + " and " + person2 );
 });
 
+// designate two random people as patenpartners
+addon.webhook('room_message', /^\/patenpartner set random$/i, function *() {
+	var patenpartner = Patenpartner(addonStore, this.tenant);
+	var partners = yield patenpartner.getRandomPeople();
+	yield patenpartner.setPartners(partners[0], partners[1]);
+	yield this.roomClient.sendNotification('Partners are: ' + partners[0] + " and " + partners[1] );
+});
+
 // add someone as potential patenpartner
 addon.webhook('room_message', /^\/patenpartner add (\w+)$/i, function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
