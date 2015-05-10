@@ -1,0 +1,13 @@
+{
+  "apps" : [{
+    "name"        : "patenpartner",
+    "script"      : "web.js",
+    "args"        : [],
+    "watch"       : true,
+    "node_args"   : "--harmony",
+    "env": {
+        "NODE_ENV": "production",
+        "PORT": 3000
+	     }
+    }]
+}
