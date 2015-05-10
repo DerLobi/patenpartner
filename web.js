@@ -1,6 +1,7 @@
 var MongoStore = require('ac-node').MongoStore;
 var ack = require('ac-koa').require('hipchat');
 var pkg = require('./package.json');
+var config = pkg.patenpartnerConfig;
 var app = ack(pkg);
 var Patenpartner = require('./lib/patenpartner');
 var addon = app.addon()
@@ -10,11 +11,13 @@ var addon = app.addon()
 	.scopes('send_notification');
 
 var addonStore = MongoStore(process.env[app.config.MONGO_ENV], 'patenpartner');
+var keyword = config.keyword || "patenpartner"
 
 addon.webhook('room_enter', function *() {
   // instead of scheduling a message (for which we would have to save the tenant
 	// and construct our own room client) we go the easy route and check on every
-	// room_enter if enough time has passed and we should send a message
+	// room_enter if notifications are enabled and it is the right point in time
+	// to send a message to this room
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var shouldSendNotification = yield patenpartner.shouldSendNotificationsForRoom(this.room)
 	if (shouldSendNotification) {
@@ -25,9 +28,8 @@ addon.webhook('room_enter', function *() {
 	}
 });
 
-
 // print who the patenpartners are
-addon.webhook('room_message', /^\/patenpartner$/i, function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + "$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var partners = yield patenpartner.currentPartners();
 	if (partners.length === 0) {
@@ -38,7 +40,7 @@ addon.webhook('room_message', /^\/patenpartner$/i, function *() {
 });
 
 // designate two people as patenpartners
-addon.webhook('room_message', /^\/patenpartner set (\w+) (\w+)$/i, function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " set (\w+) (\w+)$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var person1 = this.match[1];
 	var person2 = this.match[2];
@@ -47,7 +49,7 @@ addon.webhook('room_message', /^\/patenpartner set (\w+) (\w+)$/i, function *() 
 });
 
 // designate two random people as patenpartners
-addon.webhook('room_message', /^\/patenpartner set random$/i, function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " set random$","i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var partners = yield patenpartner.getRandomPeople();
 	yield patenpartner.setPartners(partners[0], partners[1]);
@@ -55,7 +57,7 @@ addon.webhook('room_message', /^\/patenpartner set random$/i, function *() {
 });
 
 // add someone as potential patenpartner
-addon.webhook('room_message', /^\/patenpartner add (\w+)$/i, function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " add (\w+)$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var person = this.match[1];
 	yield patenpartner.addPerson(person);
@@ -64,7 +66,7 @@ addon.webhook('room_message', /^\/patenpartner add (\w+)$/i, function *() {
 });
 
 // list available people
-addon.webhook('room_message', /^\/patenpartner list$/i, function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " list$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var people = yield patenpartner.listPeople();
 	var listOfPeople = "";
@@ -76,7 +78,7 @@ addon.webhook('room_message', /^\/patenpartner list$/i, function *() {
 });
 
 // notify about new patenpartners in the current room, or disable notifications
-addon.webhook('room_message', /^\/patenpartner notify (on|off)\s*(sunday|monday|tuesday|wednesday|thursday|friday|saturday)?$/i, function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " notify (on|off)\s*(sunday|monday|tuesday|wednesday|thursday|friday|saturday)?$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	if (this.match[1] === "on") {
 		var weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
@@ -90,7 +92,7 @@ addon.webhook('room_message', /^\/patenpartner notify (on|off)\s*(sunday|monday|
 });
 
 // remove someone as potential patenpartner
-addon.webhook('room_message', /^\/patenpartner remove (\w+)$/i, function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " remove (\w+)$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var person = this.match[1];
 	yield patenpartner.removePerson(person);
@@ -99,7 +101,7 @@ addon.webhook('room_message', /^\/patenpartner remove (\w+)$/i, function *() {
 });
 
 // mention the patenpartners and print the given message
-addon.webhook('room_message', /^(.*)@patenpartner(.*)$/i, function *() {
+addon.webhook('room_message', new RegExp("^(.*)@" + keyword + "(.*)$", "i"), function *() {
 	var firstPart = this.match[1];
 	var secondPart = this.match[2];
 	var patenpartner = Patenpartner(addonStore, this.tenant);

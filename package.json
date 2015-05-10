@@ -23,6 +23,9 @@
   "production": {
     "port": "$PORT"
   },
+  "patenpartnerConfig": {
+    "keyword": "patenpartner",
+  },
   "dependencies": {
     "ac-koa": "^0.2.6",
     "ac-koa-hipchat": "^0.2.14",
