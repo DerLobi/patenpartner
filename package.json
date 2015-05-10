@@ -17,7 +17,7 @@
     "tunnel": "ngrok 3000"
   },
   "development": {
-    "localBaseUrl": "https://1f6c5e34.ngrok.com",
+    "localBaseUrl": "https://10ac69da.ngrok.com",
     "port": 3000
   },
   "production": {
@@ -25,11 +25,13 @@
   },
   "patenpartnerConfig": {
     "keyword": "patenpartner",
+    "locale": "en"
   },
   "dependencies": {
     "ac-koa": "^0.2.6",
     "ac-koa-hipchat": "^0.2.14",
     "ac-node": "^0.2.3",
+    "localize": "^0.4.7",
     "lodash": "^3.7.0"
   }
 }
