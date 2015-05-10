@@ -29,6 +29,23 @@ addon.webhook('room_enter', function *() {
 });
 
 // print who the patenpartners are
+addon.webhook('room_message', new RegExp("^/" + keyword + " (usage|help)$", "i"), function *() {
+		var usage = "Patenpartner supports the following commands:<ul>";
+		var usage = usage + "<pre>"
+		var usage = usage +"/" + keyword + "                             " + "print the current patenpartners<br>"
+		var usage = usage +"/" + keyword + " list" + "                        " + "list all available people<br>"
+		var usage = usage +"/" + keyword + " add <name>" + "                  " + "add someone as possible patenpartner<br>"
+		var usage = usage +"/" + keyword + " remove <name>" + "               " + "remove someone as possible patenpartner<br>"
+		var usage = usage +"/" + keyword + " set <name1> <name2>" + "         " + "set the two people as patenpartners<br>"
+		var usage = usage +"/" + keyword + " set random" + "                  " + "set two random people as patenpartners<br>"
+		var usage = usage +"/" + keyword + " notify (on|off) [weekday]" + "   " + "Enable notifictions in the current room on the given weekday, or disable them<br>"
+		var usage = usage +"@" + keyword + " [message]" + "                   " + "print the given message, mentioning the patenpartners<br>"
+		var usage = usage +"/" + keyword + " usage" + "                       " + "print this usage message<br>"
+		var usage = usage + "</pre>"
+		yield this.roomClient.sendNotification(usage);
+});
+
+// print who the patenpartners are
 addon.webhook('room_message', new RegExp("^/" + keyword + "$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var partners = yield patenpartner.currentPartners();
@@ -56,15 +73,6 @@ addon.webhook('room_message', new RegExp("^/" + keyword + " set random$","i"), f
 	yield this.roomClient.sendNotification('Partners are: ' + partners[0] + " and " + partners[1] );
 });
 
-// add someone as potential patenpartner
-addon.webhook('room_message', new RegExp("^/" + keyword + " add (\w+)$", "i"), function *() {
-	var patenpartner = Patenpartner(addonStore, this.tenant);
-	var person = this.match[1];
-	yield patenpartner.addPerson(person);
-
-	yield this.roomClient.sendNotification('Added ' + person + " as potential patenpartner");
-});
-
 // list available people
 addon.webhook('room_message', new RegExp("^/" + keyword + " list$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
@@ -75,6 +83,24 @@ addon.webhook('room_message', new RegExp("^/" + keyword + " list$", "i"), functi
 	} else {
 		yield this.roomClient.sendNotification('The following people can be chosen as patenpartners:\n' + people.join(', '));
 	}
+});
+
+// add someone as potential patenpartner
+addon.webhook('room_message', new RegExp("^/" + keyword + " add (\w+)$", "i"), function *() {
+	var patenpartner = Patenpartner(addonStore, this.tenant);
+	var person = this.match[1];
+	yield patenpartner.addPerson(person);
+
+	yield this.roomClient.sendNotification('Added ' + person + " as potential patenpartner");
+});
+
+// remove someone as potential patenpartner
+addon.webhook('room_message', new RegExp("^/" + keyword + " remove (\w+)$", "i"), function *() {
+	var patenpartner = Patenpartner(addonStore, this.tenant);
+	var person = this.match[1];
+	yield patenpartner.removePerson(person);
+
+	yield this.roomClient.sendNotification('Removed ' + person + " as potential patenpartner");
 });
 
 // notify about new patenpartners in the current room, or disable notifications
@@ -89,15 +115,6 @@ addon.webhook('room_message', new RegExp("^/" + keyword + " notify (on|off)\s*(s
 		yield patenpartner.disableNotifications();
 		yield this.roomClient.sendNotification("I will not notify you about new patenpartners anymore");
 	}
-});
-
-// remove someone as potential patenpartner
-addon.webhook('room_message', new RegExp("^/" + keyword + " remove (\w+)$", "i"), function *() {
-	var patenpartner = Patenpartner(addonStore, this.tenant);
-	var person = this.match[1];
-	yield patenpartner.removePerson(person);
-
-	yield this.roomClient.sendNotification('Removed ' + person + " as potential patenpartner");
 });
 
 // mention the patenpartners and print the given message
