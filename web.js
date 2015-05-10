@@ -108,7 +108,7 @@ addon.webhook('room_message', /^(.*)@patenpartner(.*)$/i, function *() {
 		yield this.roomClient.sendNotification('No patenpartners set yet');
 	} else {
 		var mentions = "@" + partners.join(" @");
-		yield this.roomClient.sendNotification(firstPart + mentions + secondPart);
+		yield this.roomClient.sendNotification(firstPart + mentions + secondPart, {format: "text"});
 	}
 
 });
