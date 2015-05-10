@@ -11,6 +11,21 @@ var addon = app.addon()
 
 var addonStore = MongoStore(process.env[app.config.MONGO_ENV], 'patenpartner');
 
+addon.webhook('room_enter', function *() {
+  // instead of scheduling a message (for which we would have to save the tenant
+	// and construct our own room client) we go the easy route and check on every
+	// room_enter if enough time has passed and we should send a message
+	var patenpartner = Patenpartner(addonStore, this.tenant);
+	var shouldSendNotification = yield patenpartner.shouldSendNotificationsForRoom(this.room)
+	if (shouldSendNotification) {
+		var patenpartner = Patenpartner(addonStore, this.tenant);
+		var partners = yield patenpartner.getRandomPeople();
+		yield patenpartner.setPartners(partners[0], partners[1]);
+		yield this.roomClient.sendNotification('Partners are: ' + partners[0] + " and " + partners[1] );
+	}
+});
+
+
 // print who the patenpartners are
 addon.webhook('room_message', /^\/patenpartner$/i, function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
@@ -57,6 +72,20 @@ addon.webhook('room_message', /^\/patenpartner list$/i, function *() {
 		yield this.roomClient.sendNotification("No patenpartners set, start adding people by typing e.g. '/patenpartner add " + this.sender.mention_name + "'");
 	} else {
 		yield this.roomClient.sendNotification('The following people can be chosen as patenpartners:\n' + people.join(', '));
+	}
+});
+
+// notify about new patenpartners in the current room, or disable notifications
+addon.webhook('room_message', /^\/patenpartner notify (on|off)\s*(sunday|monday|tuesday|wednesday|thursday|friday|saturday)?$/i, function *() {
+	var patenpartner = Patenpartner(addonStore, this.tenant);
+	if (this.match[1] === "on") {
+		var weekdays = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+		var matchedDay = this.match[2] || "monday"
+		yield patenpartner.enableNotifications(this.room, weekdays.indexOf(matchedDay));
+		yield this.roomClient.sendNotification("I will notify you every " + matchedDay + " about the new patenpartners in the room '" + this.room.name + "'");
+	} else {
+		yield patenpartner.disableNotifications();
+		yield this.roomClient.sendNotification("I will not notify you about new patenpartners anymore");
 	}
 });
 
