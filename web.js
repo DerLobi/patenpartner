@@ -97,7 +97,7 @@ addon.webhook('room_message', new RegExp("^/" + keyword + " list$", "i"), functi
 });
 
 // add someone as potential patenpartner
-addon.webhook('room_message', new RegExp("^/" + keyword + " add (\w+)$", "i"), function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " add (.+)$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var person = this.match[1];
 	yield patenpartner.addPerson(person);
@@ -106,7 +106,7 @@ addon.webhook('room_message', new RegExp("^/" + keyword + " add (\w+)$", "i"), f
 });
 
 // remove someone as potential patenpartner
-addon.webhook('room_message', new RegExp("^/" + keyword + " remove (\w+)$", "i"), function *() {
+addon.webhook('room_message', new RegExp("^/" + keyword + " remove (.+)$", "i"), function *() {
 	var patenpartner = Patenpartner(addonStore, this.tenant);
 	var person = this.match[1];
 	yield patenpartner.removePerson(person);
