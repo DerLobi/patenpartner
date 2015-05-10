@@ -1,0 +1,98 @@
+{
+	"partners_are": {
+		"en": "Patenpartners are $[1] and $[2]",
+		"de": "Patenpartner sind $[1] und $[2]"
+	},
+	"usage_supported_commands": {
+		"en": "Patenpartner supports the following commands:",
+		"de": "Patenpartner unterstützt die folgenden Befehle:"
+	},
+	"usage_print_partners": {
+		"en": "print the current patenpartners",
+		"de": "gibt die Namen der aktuellen Patenpartner aus"
+	},
+	"usage_list_people": {
+		"en": "list all available people",
+		"de": "gibt eine Liste aller möglichen Patenpartner aus"
+	},
+	"usage_add": {
+		"en": "add someone as potential patenpartner",
+		"de": "fügt jemanden als möglichen Patenpartner hinzu"
+	},
+	"usage_remove": {
+		"en": "remove someone as potential patenpartner",
+		"de": "entfernt jemanden als möglichen Patenpartner"
+	},
+	"usage_set": {
+		"en": "set the two people as patenpartners",
+		"de": "bestimmt diese zwei Personen als aktuelle Patenpartner"
+	},
+	"usage_set_random": {
+		"en": "set two random people as patenpartners",
+		"de": "bestimmt zwei zufällig gewählte Personen als aktuelle Patenpartner"
+	},
+	"usage_notify": {
+		"en": "enable notifications in the current room on the given weekday (monday is default), or disable them",
+		"de": "aktiviert Benachrichtigungen im aktuellen Raum am angegebenen Wochentag (standardmäßig Montag), oder deaktiviert Benachrichtigungen"
+	},
+	"usage_alias": {
+		"en": "print the given message, mentioning the patenpartners",
+		"de": "gibt die angegebene Nachricht aus und erwähnt die Patenpartner"
+	},
+	"usage_usage": {
+		"en": "print this usage message",
+		"de": "gibt diese Hilfe-Nachricht aus"
+	},
+	"no_partners_set": {
+		"en": "No patenpartners set, start adding people by typing e.g. '/$[1] add $[2]'",
+		"de": "Keine Patenpartner gesetzt. Füge Leute z.B. so hinzu: '/$[1] add $[2]'"
+	},
+	"people_available": {
+		"en": "The following people can be chosen as patenpartners:\n$[1]",
+		"de": "Die folgenden Leute können als Patenpartner gesetzt werden:\n$[1]"
+	},
+	"remove_person": {
+		"en": "Removed $[1] as potential patenpartner",
+		"de": "$[1] wurde als möglicher Patenpartner entfernt"
+	},
+	"add_person": {
+		"en": "Added $[1] as potential patenpartner",
+		"de": "$[1] wurde als möglicher Patenpartner hinzugefügt"
+	},
+	"notify_enable": {
+		"en": "I will notify you every $[1] abeout the new patenpartners in the room '$[2]'",
+		"de": "Ich werde dich jeden $[1] im Raum '$[2]' über die neuen Patenpartner informieren"
+	},
+	"notify_disable": {
+		"en": "I will not notify you about new patenpartners anymore",
+		"de": "Ich werde dich nicht mehr über neue Patenpartner informieren"
+	},
+	"monday": {
+		"en": "monday",
+		"de": "Montag"
+	},
+	"tuesday": {
+		"en": "tuesday",
+		"de": "Montag"
+	},
+	"wednesday": {
+		"en": "wednesday",
+		"de": "Mittwoch"
+	},
+	"thursday": {
+		"en": "thursday",
+		"de": "Donnerstag"
+	},
+	"friday": {
+		"en": "friday",
+		"de": "Freitag"
+	},
+	"saturday": {
+		"en": "saturday",
+		"de": "Samstag"
+	},
+	"sunday": {
+		"en": "sunday",
+		"de": "Sonntag"
+	}
+}
