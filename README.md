@@ -17,6 +17,8 @@ and run the app:
 ```
 npm run web-dev
 ```
+Now go to https://hipchat.com/admin/addons click on the *"Install an integration from a descriptor URL"* link at the bottom of the page and enter http://*YOURSUBDOMAIN*.ngrok.com/addon/capabilities
+
 # Configuration
 
 You can customize the keyword that the bot listens to (default is `patenpartner`) and the locale (default is English; German is also available)
